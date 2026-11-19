@@ -66,7 +66,7 @@
         return `<div class="flow sig-page" data-sig-page data-sig-dir="${dir}" data-mode="colorida">
         <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap">
           <button class="btn accent" type="button" data-sig-zip>↓ Baixar todas as versões · ZIP</button>
-          <div class="seg" data-sig-seg><button class="on" type="button" data-mode="colorida">Colorida</button><button type="button" data-mode="positivo">Positivo</button><button type="button" data-mode="negativo">Negativo</button></div>
+          ${window.SIGMODES.seg()}
         </div>
         ${main ? `<div class="box flow sig-card">
           <div class="lbl" style="margin:0">Assinatura principal · ${main.label}</div>
@@ -453,7 +453,7 @@
             ${T.lbl('Assinaturas')}
             <button class="btn accent" type="button" data-sig-zip>↓ Baixar tudo · ZIP</button>
           </div>
-          ${T.hint('Cada pacote reúne todas as versões de cor da assinatura (colorida, positiva e negativa) no formato escolhido. Em “Baixar tudo”, todas as assinaturas e cores em um único arquivo.')}
+          ${T.hint('Cada pacote reúne todas as versões de cor da assinatura (colorida, positiva, negativa e demais cores) no formato escolhido. Em “Baixar tudo”, todas as assinaturas e cores em um único arquivo.')}
           <div class="grid cols-2">${(B.signatures || []).map((sg) => `<div class="box flow" style="padding:16px; display:flex; flex-direction:column; gap:12px">
             <div style="height:140px; border-radius:12px; background:#fff; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; padding:20px"><img src="${B.signaturesDir}/${sg.id}-colorida.svg" alt="${sg.label}" style="max-width:100%; max-height:100%; object-fit:contain; display:block" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'hint',textContent:this.getAttribute('src')}))"></div>
             <div style="font-family:var(--font-display); font-weight:800; font-size:18px; color:var(--primary)">${sg.label}</div>
