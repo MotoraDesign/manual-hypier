@@ -19,10 +19,10 @@ window.BRAND = {
 
   /* ---- cores da interface do manual ---- */
   ui: {
-    primary: '#000000',   // títulos, nav ativa, fundos escuros
+    primary: '#FFFFFF',   // títulos, nav ativa, fundos escuros
     accent: '#E2725B',    // rótulos, destaques, crumb
-    ink: '#000000',       // texto
-    paper: '#FFFFFF',     // fundo
+    ink: '#FFFFFF',       // texto
+    paper: '#000000',     // fundo
   },
 
   /* ---- paleta (HEX/RGB/CMYK — sempre com copiar) ---- */
