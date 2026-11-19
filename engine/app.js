@@ -6,6 +6,51 @@
    ============================================================ */
 (function () {
   const B = window.BRAND || {};
+
+  /* ---------- versões de cor das assinaturas ----------
+     Padrão: colorida, positivo, negativo. Cores extras (ex.: horizontal-colorida-roxo.svg) entram sozinhas:
+     1) declaradas em brand.signatureModes: [{ id: 'colorida-roxo', label: 'Roxo', bg: '#141118' }], ou
+     2) descobertas automaticamente no GitHub Pages, lendo os arquivos de signaturesDir.
+     bg = fundo da prévia (padrão branco; 'negativo' e nomes com 'branc' ficam em preto). */
+  const SIG_BASE = [{ id: 'colorida', label: 'Colorida' }, { id: 'positivo', label: 'Positivo', bg: '#FFFFFF' }, { id: 'negativo', label: 'Negativo', bg: '#000000' }];
+  const modeLabel = (id) => { const t = id.replace(/^colorida-/, '').replace(/-/g, ' '); return t.charAt(0).toUpperCase() + t.slice(1); };
+  const modeBg = (id) => (/negativ|branc/.test(id) ? '#000000' : '');
+  const normModes = (list) => {
+    const out = [];
+    list.forEach((x) => { const o = typeof x === 'string' ? { id: x } : { ...x }; if (!o.id || out.some((y) => y.id === o.id)) return; const base = SIG_BASE.find((y) => y.id === o.id) || {}; o.label = o.label || base.label || modeLabel(o.id); if (o.bg == null) o.bg = base.bg != null ? base.bg : modeBg(o.id); out.push(o); });
+    const rank = (id) => (id === 'colorida' ? 0 : /^colorida-/.test(id) ? 1 : id === 'positivo' ? 2 : id === 'negativo' ? 3 : 4);
+    return out.sort((p, q) => rank(p.id) - rank(q.id));
+  };
+  window.SIGMODES = {
+    list: normModes(B.signatureModes && B.signatureModes.length ? [...SIG_BASE, ...B.signatureModes] : SIG_BASE),
+    seg() { return `<div class="seg" data-sig-seg>${this.list.map((m, i) => `<button${i ? '' : ' class="on"'} type="button" data-mode="${m.id}">${m.label}</button>`).join('')}</div>`; },
+    bg(id) { return (this.list.find((m) => m.id === id) || {}).bg || ''; },
+  };
+  async function discoverSigModes() {
+    if (B.signatureModes && B.signatureModes.length) return;
+    const host = location.hostname.match(/^([^.]+)\.github\.io$/i);
+    if (!host) return;
+    const repo = location.pathname.split('/').filter(Boolean)[0] || `${host[1]}.github.io`;
+    const dir = B.signaturesDir || 'assets/logos/assinaturas';
+    const key = `sigmodes:${host[1]}/${repo}`;
+    let names = null;
+    try { names = JSON.parse(sessionStorage.getItem(key) || 'null'); } catch (e) {}
+    if (!names) {
+      try {
+        const r = await fetch(`https://api.github.com/repos/${host[1]}/${repo}/contents/${dir}`, { headers: { Accept: 'application/vnd.github+json' } });
+        if (!r.ok) return;
+        names = (await r.json()).map((f) => f.name);
+        sessionStorage.setItem(key, JSON.stringify(names));
+      } catch (e) { return; }
+    }
+    const ids = (B.signatures || []).map((s) => s.id).sort((p, q) => q.length - p.length);
+    const found = new Set();
+    names.forEach((n) => { if (!/\.svg$/i.test(n)) return; const base = n.replace(/\.svg$/i, ''); const sid = ids.find((id) => base.startsWith(id + '-')); if (sid) found.add(base.slice(sid.length + 1)); });
+    const extra = [...found].filter((id) => !SIG_BASE.some((m) => m.id === id));
+    if (!extra.length) return;
+    window.SIGMODES.list = normModes([...SIG_BASE, ...extra]);
+    document.querySelectorAll('[data-sig-seg]').forEach((seg) => { seg.outerHTML = window.SIGMODES.seg(); });
+  }
   const $ = (id) => document.getElementById(id);
   const rootStyle = document.documentElement.style;
 
@@ -76,27 +121,60 @@
   }
   const blockText = (b) => [...b.querySelectorAll(TEXT_SEL)].filter((el) => !el.closest('.info, .tcopy') && !el.parentElement.closest(TEXT_SEL))
     .map((el) => el.innerText.replace(/\s+\n/g, '\n').trim()).filter(Boolean).join('\n\n');
+  /* ---------- módulos do projeto ----------
+     Seções fora do projeto aparecem apagadas no menu e na capa, sem clique.
+     Lista: brand.modulesOff (ids de seção) + o que o modo edição publicar (OVERRIDES.modulesOff).
+     No modo edição continuam abertas, para poder preencher antes de ativar. */
+  const OFF_TIP = 'Esse módulo ainda não faz parte do seu projeto';
+  let OFF = new Set([...(B.modulesOff || []), ...(((window.OVERRIDES || {}).modulesOff) || [])]);
+  const isOff = (id) => OFF.has(id) && !document.body.classList.contains('adm');
+  function applyModules() {
+    document.querySelectorAll('.nav button[data-id]').forEach((b) => {
+      const off = OFF.has(b.dataset.id);
+      b.classList.toggle('off', off);
+      if (off) { b.dataset.tip = OFF_TIP; b.setAttribute('aria-disabled', 'true'); } else { delete b.dataset.tip; b.removeAttribute('aria-disabled'); }
+    });
+    const allOff = (list) => list.length && list.every((s) => OFF.has(s.id));
+    document.querySelectorAll('.nav-label[data-group]').forEach((g) => g.classList.toggle('off', allOff(SECTIONS.filter((s) => s.group === g.dataset.group))));
+    document.querySelectorAll('.part-header[data-part]').forEach((h) => h.classList.toggle('off', allOff(SECTIONS.filter((s) => s.part === h.dataset.part))));
+    document.querySelectorAll('.hero-card[data-home]').forEach((c) => {
+      const base = SECTIONS.find((s) => s.id === c.dataset.home);
+      const pool = base ? SECTIONS.filter((s) => (base.group ? s.group === base.group : s.part === base.part) && s.id !== 'capa') : [];
+      const first = pool.find((s) => !OFF.has(s.id));
+      const off = !first;
+      c.classList.toggle('off', off);
+      c.dataset.goto = first ? first.id : c.dataset.home;
+      if (off) { c.dataset.tip = OFF_TIP; c.setAttribute('aria-disabled', 'true'); } else { delete c.dataset.tip; c.removeAttribute('aria-disabled'); }
+    });
+  }
+  window.MODULES = {
+    sections: () => SECTIONS.filter((s) => s.id !== 'capa').map((s) => ({ id: s.id, label: s.label, group: s.group, part: s.part })),
+    parts: () => PARTS,
+    base: () => [...(B.modulesOff || [])],
+    off: () => [...OFF],
+    set(list) { OFF = new Set([...(B.modulesOff || []), ...(list || [])]); applyModules(); },
+  };
   const nav = $('nav'), panels = $('panels');
   let n = 0;
   PARTS.forEach((part) => {
     const items = SECTIONS.filter((s) => s.part === part.id);
     if (!items.length) return;
     const ph = document.createElement('div');
-    ph.className = 'part-header';
+    ph.className = 'part-header'; ph.dataset.part = part.id;
     ph.innerHTML = `<span class="pdot">◆</span><span><span class="plabel">${part.label}</span><span class="psub">${part.sub || ''}</span></span>`;
     nav.appendChild(ph);
     let lastGroup = null;
     items.forEach((s) => {
       if (s.group !== lastGroup) {
         const g = document.createElement('div');
-        g.className = 'nav-label'; g.textContent = s.group.replace(/^\s*\d+\s*·\s*/, '');
+        g.className = 'nav-label'; g.dataset.group = s.group; g.textContent = s.group.replace(/^\s*\d+\s*·\s*/, '');
         nav.appendChild(g); lastGroup = s.group;
       }
       const idx = s.idx || (s.id === 'capa' ? '—' : String(++n).padStart(2, '0'));
       const b = document.createElement('button');
       b.type = 'button'; b.dataset.id = s.id;
       b.innerHTML = `<span class="idx">${idx}</span><span class="txt">${s.label}</span>`;
-      b.addEventListener('click', () => go(s.id));
+      b.addEventListener('click', () => { if (isOff(s.id)) return; go(s.id); });
       nav.appendChild(b);
       const p = document.createElement('section');
       p.className = 'panel'; p.dataset.id = s.id; p.dataset.screenLabel = s.label;
@@ -106,6 +184,7 @@
       panels.appendChild(p);
     });
   });
+  discoverSigModes();
 
   /* "Última atualização em": data mais recente entre os arquivos do manual (cabeçalho Last-Modified no servidor,
      ex.: GitHub Pages). Abrindo localmente (file://), usa a data do index.html. brand.updatedAt fixa a data manualmente. */
@@ -130,13 +209,13 @@
   const HM = (window.HOME_MENU || []).filter((m) => SECTIONS.some((s) => s.id === m.goto));
   if (HM.length) document.querySelectorAll('[data-hero-cards]').forEach((wrap) => {
     wrap.classList.add('is-menu');
-    wrap.innerHTML = HM.map((m, i) => `<button class="hero-card" type="button" data-goto="${m.goto}"><span class="hc-num">${String(i + 1).padStart(2, '0')}</span><span class="hc-tt">${m.label}</span>${m.sub ? `<span class="hc-sb">${m.sub}</span>` : ''}<span class="hc-go">Abrir →</span></button>`).join('');
+    wrap.innerHTML = HM.map((m, i) => `<button class="hero-card" type="button" data-home="${m.goto}" data-goto="${m.goto}"><span class="hc-num">${String(i + 1).padStart(2, '0')}</span><span class="hc-tt">${m.label}</span>${m.sub ? `<span class="hc-sb">${m.sub}</span>` : ''}<span class="hc-go">Abrir →</span></button>`).join('');
   });
   else document.querySelectorAll('[data-hero-cards]').forEach((wrap) => {
     wrap.innerHTML = PARTS.filter((p) => p.id !== 'creditos').map((p) => {
       const first = SECTIONS.find((s) => s.part === p.id && s.id !== 'capa');
       if (!first) return '';
-      return `<button class="hero-card" type="button" data-goto="${first.id}"><span class="hc-dot">◆</span><span class="hc-tt">${p.label}</span><span class="hc-sb">${p.desc || p.sub || ''}</span><span class="hc-go">Começar →</span></button>`;
+      return `<button class="hero-card" type="button" data-home="${first.id}" data-goto="${first.id}"><span class="hc-dot">◆</span><span class="hc-tt">${p.label}</span><span class="hc-sb">${p.desc || p.sub || ''}</span><span class="hc-go">Começar →</span></button>`;
     }).join('');
   });
 
@@ -250,7 +329,7 @@
     const label = btn.textContent; btn.disabled = true; btn.textContent = 'Preparando…';
     try {
       const files = [];
-      for (const sg of B.signatures || []) for (const m of ['colorida', 'positivo', 'negativo']) {
+      for (const sg of B.signatures || []) for (const m of window.SIGMODES.list.map((x) => x.id)) {
         const r = await fetch(`${dir}/${sg.id}-${m}.svg`);
         if (r.ok) files.push({ name: `${m}/${slug(B.name)}-${sg.id}-${m}.svg`, data: new Uint8Array(await r.arrayBuffer()) });
       }
@@ -320,7 +399,7 @@
   /* ---------- interações (delegadas, montadas uma vez) ---------- */
   document.addEventListener('click', (e) => {
     const goto = e.target.closest('[data-goto]');
-    if (goto) { go(goto.dataset.goto); return; }
+    if (goto) { if (goto.classList.contains('off') && !document.body.classList.contains('adm')) return; go(goto.dataset.goto); return; }
 
     const carBtn = e.target.closest('[data-car-step],[data-car-go]');
     if (carBtn) { carShow(carBtn.closest('.car'), carBtn.dataset.carGo != null ? +carBtn.dataset.carGo : null, +carBtn.dataset.carStep || 0); return; }
@@ -396,6 +475,8 @@
       const page = sigBtn.closest('[data-sig-page]'), mode = sigBtn.dataset.mode, dir = page.dataset.sigDir;
       sigBtn.parentElement.querySelectorAll('button').forEach((x) => x.classList.toggle('on', x === sigBtn));
       page.dataset.mode = mode;
+      const bg = window.SIGMODES.bg(mode), dk = !!(bg && window.isDark && window.isDark(bg));
+      page.querySelectorAll('.sig-stage').forEach((st) => { st.style.background = bg; st.style.borderColor = dk ? bg : ''; st.classList.toggle('dark', dk); });
       page.querySelectorAll('img[data-sig]').forEach((im) => {
         const src = `${dir}/${im.dataset.sig}-${mode}.svg`;
         im.dataset.ph = `${im.alt} · ${src}`;
@@ -454,7 +535,7 @@
     document.querySelectorAll('.nav button').forEach((b) => {
       const p = panels.querySelector(`.panel[data-id="${b.dataset.id}"]`);
       const hit = !q || norm(b.textContent).includes(q) || (p && norm(p.textContent).includes(q));
-      b.style.display = hit ? '' : 'none';
+      b.style.display = hit && !(q && b.classList.contains('off')) ? '' : 'none';
     });
     const sweep = (sel, stop) => document.querySelectorAll(sel).forEach((h) => {
       let el = h.nextElementSibling, any = false;
@@ -471,6 +552,7 @@
   });
 
   /* ---------- init ---------- */
+  applyModules();
   const start = (location.hash || '').replace('#', '');
-  go(SECTIONS.find((s) => s.id === start) ? start : (SECTIONS[0] && SECTIONS[0].id));
+  go(SECTIONS.find((s) => s.id === start) && !OFF.has(start) ? start : (SECTIONS[0] && SECTIONS[0].id));
 })();

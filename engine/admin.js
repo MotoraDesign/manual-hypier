@@ -10,7 +10,7 @@
    ============================================================ */
 (function () {
   const B = window.BRAND || {}, CFG = B.admin || {};
-  const PUB = Object.assign({ texts: {}, titles: {}, subs: {}, images: {}, removed: [], added: {}, dtrees: {}, positions: {}, colors: {} }, window.OVERRIDES || {});
+  const PUB = Object.assign({ texts: {}, titles: {}, subs: {}, images: {}, removed: [], added: {}, dtrees: {}, positions: {}, colors: {}, modulesOff: [] }, window.OVERRIDES || {});
   const KEY = 'manual-admin:' + (B.name || 'marca');
   const TEXT_SEL = '.copytext, .lbl, .hint, .quote, .sb-txt, li, .lvl-title, .lvl-eyebrow, figcaption, .hc-tt, .hc-sb, .hero-line, .hero-intro, .dt-q, h2, h3';
   const BLOCK_SEL = '.box, figure, .slogan-banner';
@@ -46,7 +46,8 @@
   } catch (e) {}
   const isAdmin = store.on;
   let D = isAdmin ? (store.draft || clone(PUB)) : PUB;
-  D.dtrees = D.dtrees || {}; D.positions = D.positions || {}; D.colors = D.colors || {};
+  D.dtrees = D.dtrees || {}; D.positions = D.positions || {}; D.colors = D.colors || {}; D.modulesOff = D.modulesOff || [];
+  if (window.MODULES) window.MODULES.set(D.modulesOff);
 
   /* ---------- chaves estáveis por ordem no DOM de cada painel ---------- */
   function index() {
@@ -141,6 +142,22 @@
   }
   document.addEventListener('manual:page', page);
 
+  /* ---------- módulos do projeto: quais seções fazem parte deste manual ---------- */
+  function modsForm() {
+    const M = window.MODULES; if (!M) return;
+    const base = new Set(M.base()), off = new Set(M.off());
+    const secs = M.sections(), groups = [];
+    secs.forEach((s) => { const k = s.group || s.part; let g = groups.find((x) => x.k === k); if (!g) groups.push(g = { k, list: [] }); g.list.push(s); });
+    const m = modal(`<h3>Módulos do projeto</h3>
+      <p class="hint">Desmarque as seções que não fazem parte deste projeto. Elas ficam apagadas no menu e na capa, sem clique, com o aviso “Esse módulo ainda não faz parte do seu projeto”. No modo edição continuam abertas para você preencher antes de ativar.</p>
+      <div class="adm-mods">${groups.map((g) => `<fieldset><legend>${esc(String(g.k).replace(/^\s*\d+\s*·\s*/, ''))}</legend>${g.list.map((s) => `<label class="${base.has(s.id) ? 'lock' : ''}"><input type="checkbox" value="${esc(s.id)}"${off.has(s.id) ? '' : ' checked'}${base.has(s.id) ? ' disabled' : ''}> ${esc(s.label)}${base.has(s.id) ? ' <span class="hint" style="margin:0">(desativado no brand.js)</span>' : ''}</label>`).join('')}</fieldset>`).join('')}</div>
+      <div class="adm-row"><button type="button" data-close>Cancelar</button><button type="button" class="pri" data-save>Aplicar</button></div>`);
+    m.querySelector('[data-save]').addEventListener('click', () => {
+      const list = [...m.querySelectorAll('.adm-mods input:not(:disabled)')].filter((i) => !i.checked).map((i) => i.value);
+      commit((dd) => { dd.modulesOff = list; });
+      M.set(list); m.remove();
+    });
+  }
   function modal(html) {
     const m = document.createElement('div');
     m.className = 'adm-modal';
@@ -199,6 +216,7 @@
       images: n(d.images, p.images),
       removed: d.removed.filter((k) => !p.removed.includes(k)).length + p.removed.filter((k) => !d.removed.includes(k)).length,
       added: JSON.stringify(d.added) === JSON.stringify(p.added) ? 0 : Object.values(d.added).flat().length,
+      modules: JSON.stringify([...(d.modulesOff || [])].sort()) === JSON.stringify([...(p.modulesOff || [])].sort()) ? 0 : 1,
       colors: Object.keys(Object.assign({}, d.colors, p.colors || {})).filter((k) => JSON.stringify(d.colors[k]) !== JSON.stringify((p.colors || {})[k])).length,
       positions: Object.keys(Object.assign({}, d.positions, p.positions || {})).filter((k) => JSON.stringify(d.positions[k]) !== JSON.stringify((p.positions || {})[k])).length,
       trees: Object.keys(Object.assign({}, d.dtrees, p.dtrees || {})).filter((k) => JSON.stringify(d.dtrees[k]) !== JSON.stringify((p.dtrees || {})[k])).length,
@@ -210,13 +228,14 @@
   B_.className = 'adm-bar';
   document.body.appendChild(B_);
   function bar() {
-    const c = changes(), total = c.texts + c.images + c.removed + c.added + c.trees + c.positions + c.colors;
+    const c = changes(), total = c.texts + c.images + c.removed + c.added + c.trees + c.positions + c.colors + c.modules;
     B_.innerHTML = `
       <span class="adm-st"><b>Modo edição</b> · ${total ? `rascunho com ${total} alteração(ões) não publicada(s)` : 'sem alterações pendentes'}</span>
       <span class="adm-actions">
         <button type="button" data-adm="undo" ${store.hist.length ? '' : 'disabled'}>Desfazer</button>
         <button type="button" data-adm="restore">Restaurar original desta página</button>
         <button type="button" data-adm="discard" ${total ? '' : 'disabled'}>Descartar rascunho</button>
+        <button type="button" data-adm="mods">Módulos do projeto</button>
         <button type="button" data-adm="gh">GitHub</button>
         <button type="button" class="pri" data-adm="review" ${total ? '' : 'disabled'}>Revisar e publicar</button>
         <button type="button" data-adm="exit">Sair</button>
@@ -529,12 +548,13 @@
       });
       location.reload();
     }
+    if (a === 'mods') modsForm();
     if (a === 'gh') ghForm();
     if (a === 'exit') { store.on = false; location.reload(); }
     if (a === 'review') {
       const c = changes();
       const m = modal(`<h3>Revisar alterações</h3>
-        <ul class="adm-sum"><li>Textos alterados: <b>${c.texts}</b></li><li>Imagens trocadas: <b>${c.images}</b></li><li>Itens removidos ou restaurados: <b>${c.removed}</b></li><li>Blocos adicionados: <b>${c.added}</b></li><li>Árvores de decisão alteradas: <b>${c.trees}</b></li><li>Pontos da matriz movidos: <b>${c.positions}</b></li><li>Cores alteradas: <b>${c.colors}</b></li></ul>
+        <ul class="adm-sum"><li>Textos alterados: <b>${c.texts}</b></li><li>Imagens trocadas: <b>${c.images}</b></li><li>Itens removidos ou restaurados: <b>${c.removed}</b></li><li>Blocos adicionados: <b>${c.added}</b></li><li>Árvores de decisão alteradas: <b>${c.trees}</b></li><li>Pontos da matriz movidos: <b>${c.positions}</b></li><li>Cores alteradas: <b>${c.colors}</b></li><li>Módulos do projeto alterados: <b>${c.modules ? 'sim' : 'não'}</b></li></ul>
         <p class="hint">Publicar grava as alterações no repositório${store.gh.repo ? ` <b>${esc(store.gh.repo)}</b>` : ''} e elas ficam visíveis para todos.</p>
         <div class="adm-row"><button type="button" data-close>Continuar editando</button><button type="button" class="pri" data-pub>Publicar</button></div>`);
       m.querySelector('[data-pub]').addEventListener('click', (ev) => publish(ev.target));
