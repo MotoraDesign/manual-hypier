@@ -87,23 +87,25 @@
       crumb: 'Estratégia', title: 'Posicionamento',
       sub: 'Propósito, proposta de valor e Big Idea.',
       render: () => T.sloganBanner() + T.cards([
-        ['Nosso propósito', `${P} Por que a marca existe, em uma frase.`],
-        ['Nossa proposta de valor', `${P} O que a marca entrega e para quem.`],
-        ['Big Idea', `${P} A mensagem central que queremos comunicar.`],
+        ['Nosso propósito', "Revolucionar a presença digital das marcas, fazendo o seu conteúdo ecoar."],
+        ['Nossa proposta de valor', "Conduzir marcas que não dominam a linguagem digital a navegarem esse ambiente como verdadeiras nativas."],
+        ['Big Idea', "Dominamos a linguagem digital e isso nos torna capazes de conduzir marcas dos mais variados segmentos a participar de conversas que vão além da superfície das trends."],
       ], 3, true),
     },
     {
       id: 'pos-cliente', label: 'Cliente ideal', group: '01 · Estratégia',
       crumb: 'Estratégia', title: 'Cliente ideal',
-      sub: 'Os públicos prioritários da marca.',
-      render: () => `<div class="grid cols-2">
-        ${['Primário', 'Secundário'].map((k) => `<div class="box flow">
-          ${T.tag(`${k} · [preencher] idade`)}
-          ${T.body(`${P} Quem é, o que faz, como é a rotina.`)}
-          ${T.body(`${P} O que a marca representa para essa pessoa.`)}
-          ${T.body(`<b>${B.name}</b> é a melhor solução porque ${P}`)}
-          ${T.chips(['Maior medo: [preencher]', 'Maior desejo: [preencher]'])}
-        </div>`).join('')}
+      sub: "Quem é o nosso cliente ideal.",
+      render: () => `<div class="flow">
+        <div class="box flow">
+          ${T.tag('CEO ou gerente de marketing · 35 anos')}
+          ${["CEO ou gerente de marketing de uma empresa B2B, com 35 anos, onde atua há bastante tempo e iniciou sua trajetória ainda como estagiário, enquanto cursava Marketing Estratégico no Insper. Cresceu junto com o negócio e hoje ocupa uma posição de liderança. É uma pessoa profundamente inserida no universo corporativo e bastante racional, que valoriza decisões estratégicas. Para ele, o trabalho vem sempre em primeiro lugar.","Durante a semana, divide seus dias entre o trabalho na Faria Lima e a vida na Vila Olímpia, onde mora e valoriza a praticidade de ter tudo por perto. Nos fins de semana, corre no Parque Ibirapuera para encontrar equilíbrio, organizar os pensamentos e aliviar a pressão da rotina. Consome conteúdos sobre tecnologia, inovação e negócios. Não é uma pessoa nada criativa e, por isso, sabe o quanto precisa de ajuda para evoluir a presença digital da empresa em que trabalha.","É uma pessoa admirada por colegas, equipe, amigos e família. Reconhecido pela dedicação, disciplina e visão de futuro. Tem seus esforços totalmente direcionados a se tornar uma referência como empresário."].map(T.body).join('')}
+        </div>
+        <div class="grid cols-2">
+          <div class="box flow">${T.lbl('Maior medo')}${T.body("Cometer um erro importante no trabalho e prejudicar a sua reputação ou a reputação da empresa. Não quer que a sua empresa se posicione de forma genérica. Ele gosta de ser o assunto, de chamar atenção e se destacar como um case de sucesso nos eventos que frequenta.")}</div>
+          <div class="box flow">${T.lbl('Maior desejo')}${T.body("Ter uma parceria especializada em digital que entenda o mundo corporativo, mas seja extremamente criativa e saiba comunicar qualquer assunto de forma atual e relevante. Alguém em quem ele possa confiar de olhos fechados.")}</div>
+        </div>
+        <div class="box flow">${T.lbl(`${B.name} é a melhor solução porque`)}${T.lead("Se coloca como uma parceria próxima: escuta, entende e traduz o discurso corporativo para o digital com sensibilidade e estratégia. Acompanha, orienta e provoca na medida certa, oferecendo segurança em cada decisão.")}</div>
       </div>`,
     },
 
@@ -111,17 +113,16 @@
     {
       id: 'pos-quemsomos', label: 'Quem somos', group: '02 · Identidade da marca',
       crumb: 'Identidade da marca', title: 'Quem somos',
-      sub: 'A marca, o slogan e o texto institucional em duas versões.',
+      sub: "A marca, o slogan e o texto institucional.",
       render: () => `<div class="flow">
         <div class="grid cols-2">
-          <div class="box" style="display:flex; flex-direction:column; justify-content:center">${T.lbl('Slogan', INFO.slogan)}<p class="slogan">${B.slogan.replace(/\*/g, '')}</p></div>
-          <div class="box flow">${T.lbl('Quem somos · versão curta')}${T.lead(`${P} Uma ou duas frases sobre ${B.name}.`)}${T.hint('Para headlines e bio de redes sociais.')}</div>
+          <div class="box" style="display:flex; flex-direction:column; justify-content:center">${T.lbl('Slogan', INFO.slogan)}<p class="slogan">${B.slogan.replace(/\*/g, '')}</p>${T.hint('Em inglês: Step past the obvious.')}</div>
+          <div class="box flow">${T.lbl('Tagline')}${T.lead('A Connect2B Company')}${T.hint('Em textos: “O braço digital da Connect2B” ou “A digital spin-off from Connect2B”.')}</div>
         </div>
         <div class="box flow">
-          ${T.lbl('Quem somos · versão longa')}
-          ${T.body(`${P} Quem é ${B.name}: o que faz, como faz e para quem.`)}
-          ${T.body(`${P} Desde quando atua e o que construiu até aqui.`)}
-          ${T.body(`${P} Os grandes temas (eixos) em torno dos quais a marca se organiza.`)}
+          ${T.lbl('Quem somos')}
+          ${T.lead('Especialistas nada convencionais')}
+          ${["Somos a Hypier, o braço digital da Connect2B que vai mudar o ritmo da sua comunicação.","A gente acredita que marca parada não aparece e, por isso, assumimos a missão de te colocar em movimento, marcando sua presença no digital.","Não importa o seu segmento, assunto ou tamanho: nossa vibe é fazer conteúdo virar conversa e marca virar assunto. Se o papo tá enrolado, a gente destrava e faz fluir. Se a ideia não tem forma, a gente repensa e transforma. Atuamos onde tudo verdadeiramente acontece, como parceiros de palco e também de bastidor.","Aqui, criar é movimento. A gente sente o compasso de cada cliente, entende o tempo da comunicação e joga junto.","A gente vive de olho no feed, mas com os pés sempre no mundo real. Afinal, sabemos que toda boa ideia nasce de troca, escuta e de uma leitura afiada de contexto. Pensamos fora da caixa, sim, mas sempre com filtro: se é só barulho, a gente corta. Se é melodia, a gente aposta!","No fim, é simples: a gente não entra pra fazer mais do mesmo. Entra pra atravessar o óbvio."].map(T.body).join('')}
         </div>
       </div>`,
     },
@@ -129,7 +130,11 @@
       id: 'pos-pilares', label: 'Pilares', group: '02 · Identidade da marca',
       crumb: 'Identidade da marca', title: 'Pilares',
       sub: 'As ideias-chave que sustentam a marca.',
-      render: () => T.cards([1, 2, 3, 4].map((i) => [`Pilar ${i}`, `${P} O que esse pilar significa e como aparece na marca.`])),
+      render: () => `<div class="grid cols-2">${[["Autêntico é quem enxerga diferente","Nossa autenticidade está na habilidade de interpretar contextos com profundidade e combinar referências inusitadas para criar propostas que fogem do comum. A gente não só acompanha tendências, mas entende o ritmo do mundo e constrói conversas por meio de vídeos e comunicação digital.","Isso significa que criamos ideias próprias, exploramos novos pontos de vista e construímos conteúdos que se destacam pela originalidade e pela conexão real com as pessoas."],["Criar é atravessar o óbvio","Nossa criatividade nasce da curiosidade, da escuta e da ousadia para propor caminhos que vão além do esperado. Acreditamos que criar é atravessar o óbvio com atitude, explorando novas possibilidades sem perder o alinhamento com os objetivos do cliente.","Isso significa que fugimos de fórmulas prontas e formatos genéricos. Ousamos em propor soluções criativas, testar e descobrir o que realmente funciona. Valorizamos ideias que se diferenciam pela coragem de experimentar, mas sempre com critério, estratégia e propósito."],["Cada projeto dança no seu tempo","Acreditamos que cada projeto tem seu próprio ritmo, e nosso papel é escutá-lo. Agilidade, para nós, não é pressa, mas saber o momento certo de acelerar, aprofundar ou ajustar o passo. Trabalhamos de forma dinâmica e sensível, adaptando processos e entregas à realidade de cada cliente e, assim, preparamos suas marcas para acompanhar o pace acelerado das redes sociais sem perder a coerência.","Isso significa que cada solução é oferecida sob medida, ajustando abordagem, processo e entrega para atender de forma precisa às demandas de cada cliente. Atuamos com prontidão para conectar marcas ao timing das conversas digitais, mesmo que o cliente ainda não esteja familiarizado com esse universo."],["Estar junto muda tudo","Estar presente, para nós, é construir relações baseadas em diálogo, escuta e envolvimento real ao longo de todo o processo. Porque só quando todo mundo dança junto é que os melhores resultados acontecem.","Isso significa que atuamos lado a lado com nossos clientes, fortalecendo vínculos de confiança. Mantemos uma comunicação aberta, transparente e frequente para garantir que todos tenham clareza sobre cada etapa do processo e também sobre o objetivo final de cada ação. Criamos um ambiente seguro para troca de ideias, afinal, a presença constante evita surpresas e impulsiona os melhores resultados."],["Onde a ideia toca, ela permanece","Usamos a sensibilidade humana como base do nosso trabalho. Acreditamos que a emoção importa e que perceber sentimentos, contextos e nuances é essencial para criar soluções mais profundas e conectadas às pessoas.","Isso significa que observamos além do briefing: captamos o que é dito, o que é sentido e o que está nas entrelinhas. Nossas criações nascem da empatia e da atenção às pessoas, resultando em propostas que despertam conexão emocional. Tudo que fazemos deve despertar emoção, inspirar e despertar boas conversas."]].map(([t, a, b], i) => `<div class="box flow">
+          ${T.lbl(`0${i + 1}. ${t}`)}
+          ${T.body(a)}
+          ${T.body(b)}
+        </div>`).join('')}</div>`,
     },
 
     /* ---------- 03 · Estrutura ---------- */
@@ -289,7 +294,7 @@
       crumb: 'Personalidade', title: 'Arquétipos',
       sub: 'Os arquétipos que definem a personalidade da marca.',
       render: () => {
-        const arq = [['Arquétipo 1', 32, 26], ['Arquétipo 2', 64, 34]];
+        const arq = [["Fora da lei",30,26,"São rebeldes, gostam de quebrar regras e de chamar atenção. Não acreditam no certo ou no errado, mas na sua própria autenticidade e que podem mudar o mundo com esse pensamento.","Esse arquétipo traduz nosso jeito de criar: inquieto, fora do padrão e com prazer em desafiar o que virou regra. É com essa energia que criamos conteúdos que geram conversas. Ele guia a forma como criamos e o tom confiante que usamos para apresentar os nossos cases."],["Prestativo",68,70,"Extremamente solícito e empático. Muitas vezes coloca a necessidade do outro acima da sua própria.","Na Hypier, esse arquétipo entra em cena quando a gente pega junto no projeto, inclui o cliente no processo e entende exatamente do que ele precisa antes de entrar em ação. Ele guia a forma como construímos as nossas relações."]];
         return `<div class="flow">
           <div class="box">
             <div class="arqmap">
@@ -298,9 +303,8 @@
               <span class="am-lbl am-left">Autoridade</span><span class="am-lbl am-right">Pertencimento</span>
               ${arq.map(([n, x, y]) => `<span class="am-dot" style="left:${x}%; top:${y}%"><i></i>${n}</span>`).join('')}
             </div>
-            ${T.hint(`${P} Por que esses arquétipos se agrupam nesse quadrante.`)}
           </div>
-          ${T.cards(arq.map(([n]) => [n, `${P} Como esse arquétipo aparece na marca.`]), 2)}
+          <div class="grid cols-2">${arq.map(([n, , , a, b]) => `<div class="box flow">${T.lbl(n)}${T.lead(a)}${T.body(b)}</div>`).join('')}</div>
         </div>`;
       },
     },
@@ -311,9 +315,8 @@
       render: () => `<div class="grid cols-2">
         ${T.photo('assets/fotos/persona.jpg', 'retrato da persona', 320)}
         <div class="box flow">
-          ${T.body(`${P} Apresentação em primeira pessoa: nome, idade, profissão.`)}
-          ${T.body(`${P} No que acredita e como se comunica.`)}
-          ${T.body(`${P} Com o que se preocupa e quais são seus limites.`)}
+          ${T.lead('E aí, gente! Pode me chamar de Luna.')}
+          ${["Tenho 28 anos, trabalho como publicitária e tenho uma relação muito próxima com o universo criativo, urbano e cultural.","Sou de Curitiba, mas me mudei para São Paulo já faz uns anos, e simplesmente amo morar aqui! Minha casa fica em Pinheiros, o que é perfeito pra mim, que estou sempre em busca de novos cafés, lojinhas, restaurantes e lugares legais para me inspirar. Sou uma pessoa muito curiosa e também carinhosa. Mãe de pet, estou sempre acompanhada seja pelo Milo ou pelo Otis, meu gato e meu cachorro, cada um com uma personalidade completamente oposta, mas que são igualmente maravilhosos.","Sou desenrolada, converso com todo mundo, amo trocar ideia, conhecer pessoas novas e criar vínculos. Ao mesmo tempo, dou valor a relações verdadeiras: tenho amizades de longa data e cuido com atenção do meu círculo mais próximo.","Sou agitada, inquieta e difícil de desligar. Estou sempre pesquisando, criando ou descobrindo algo novo. Acompanho tendências e piro pesquisando sobre comportamento, cultura e criatividade. Isso ajuda muito no meu trabalho!","Meu estilo reflete quem eu sou: streetwear casual, com um toque fashion. Curto me vestir bem sem parecer forçado e, para isso, crio moodboards dos meus looks no Pinterest e estou sempre misturando conforto com estilo e elegância.","No dia a dia, consumo o que acompanha meu ritmo: um Super Coffee antes de sair de casa ou entre uma reunião e outra, um café rápido no Starbucks quando preciso virar a chave, um McDonald’s sem culpa depois de um dia corrido…","No tempo livre, tento equilibrar corpo e mente do meu jeito. Faço pilates com a minha mãe, que acaba sendo mais do que exercício: é um momento de troca e presença. Gosto de hot yoga para desacelerar a cabeça e de corrida de rua para sentir a cidade em movimento. Amo colocar o fone de ouvido e deixar as ideias fluírem com uma música animada. Estou sempre com o radar ligado, observando comportamentos, conversas e movimentos culturais, porque é daí que surgem as melhores ideias."].map(T.body).join('')}
         </div>
       </div>`,
     },
@@ -323,32 +326,34 @@
       sub: 'A voz se adapta ao contexto, mas algumas qualidades estão sempre presentes.',
       render: () => `<div class="flow">
         <div class="box flow">
+          ${T.body("A voz da nossa marca sempre leva em conta o contexto e o conteúdo da mensagem, podendo se alterar dentro das diferentes situações em que será utilizada. Apesar dessa flexibilidade, algumas qualidades principais de como nos comunicamos devem ser transmitidas em tudo que dizemos. É isso que dá personalidade e exclusividade ao conteúdo da nossa marca.")}
+          ${T.body("Somos próximos, solícitos, amigáveis, ambiciosos, ousados e autênticos, e isso é mostrado em nosso tom de voz. Falamos assim entre nós e com nossos clientes. Procuramos ser claros e transparentes e manter uma conexão emocional com cada pessoa.")}
+        </div>
+        <div class="box flow">
           ${T.lbl('Como nos referimos a nós mesmos')}
-          ${T.body(`Escrevemos <b>${B.name}</b> sempre com a grafia oficial. ${P} regras de maiúsculas/minúsculas e destaque.`)}
+          ${T.body(`Escrevemos <b>${B.name}</b> sempre com a grafia oficial: “a Hypier”. Em textos, nos referimos à marca como “O braço digital da Connect2B” ou “A digital spin-off from Connect2B”.`)}
         </div>
         <div class="box flow">
           ${T.tag(`A voz de ${B.name} É`)}
-          ${['Qualidade 1', 'Qualidade 2', 'Qualidade 3'].map((q) => `${T.lbl(q)}${T.beforeAfter('[preencher] frase como NÃO dizer', '[preencher] a mesma frase no tom da marca')}`).join('')}
+          <div class="grid cols-3">${[["Ousada e provocativa, mas realista","Falamos de forma direta, sem rodeios e sem medo de propor ideias inusitadas. Questionamos o óbvio, puxamos a conversa pra frente e evitamos qualquer linguagem genérica. Nossa ousadia vem da segurança sobre o nosso bom trabalho, não do exagero."],["Segura, mas próxima e presente","Falamos como parceiros, não como consultores distantes. Usamos “a gente”, fazemos perguntas e mostramos que estamos acompanhando de perto. Explicamos ideias ousadas de forma didática, nunca técnicos ou distantes demais. Nos posicionamos como especialistas, não como autoridade. Nossa conversa é horizontal, de igual para igual."],["Viva e em movimento, mas objetiva","Nossa linguagem acompanha o fluxo do digital e se parece com uma conversa casual. Variamos o ritmo do texto, alternamos frases curtas e médias e usamos palavras que sugerem ação, tempo e movimento, como beat, buzz, batida, compasso e bastidor. A gente usa imagens e analogias para dar ritmo à conversa, mas evita excessos ou construções rebuscadas. Podemos viajar na linguagem, mas nunca para soar enigmáticos."]].map(([t, d]) => `<div class="flow">${T.lbl(t)}${T.body(d)}</div>`).join('')}</div>
+          ${T.lbl('Exemplos')}
+          ${[["Nossa estratégia gera buzz e engajamento de forma inovadora.","Nossa estratégia gera buzz e engajamento com emoção!"],["Nosso diferencial é uma abordagem 360°.","A gente muda o caminho antes de qualquer assunto ficar batido."],["Criamos conteúdo disruptivo para as redes sociais.","Nada de criar no automático! A gente produz os conteúdos que gostaríamos de ver."],["Essa abordagem é mais criativa.","Essa ideia já vem com identidade própria."],["Trabalhamos de forma colaborativa.","Aqui ninguém tá sozinho."],["Oferecemos suporte ao longo do projeto.","Estamos o tempo todo do seu lado."],["Nos adaptamos a diferentes demandas.","A gente sente que cada projeto pede um ritmo."],["Esse conteúdo precisa ser aprimorado.","Esse conteúdo pede mais sincronia."],["Nosso principal canal de atuação são as redes sociais.","Nosso palco vai além do feed."],["Buscamos antecipar tendências antes que elas se consolidem.","A gente sente o hype antes de virar trend."],["Criamos engajamento de forma estratégica.","A gente puxa conversa, não força o buzz."]].map(([n, y]) => T.beforeAfter(n, y)).join('')}
         </div>
         <div class="box flow">
           <span class="part-tag" style="color:var(--no); border-color:var(--no); background:transparent">A voz NÃO é</span>
-          <div class="grid cols-2">
-            ${[1, 2, 3, 4].map((i) => T.dd(false, `Traço evitado ${i}`, T.body(`${P} Por que evitamos e o que fazemos no lugar.`))).join('')}
-          </div>
+          ${[["Corporativa","Evitamos o tom corporativo engessado. Não falamos em fonte Arial 12 nem usamos linguagem burocrática nas trocas do dia a dia. Nossa comunicação precisa soar viva, humana e natural, como numa conversa. Mesmo quando tratamos de estratégia e negócio, escolhemos palavras que circulam no digital e criam proximidade. A marca fala com clareza e atitude, não com formalidade ou frieza.",[["Alinhamos internamente e retornamos com os próximos passos.","A gente alinhou por aqui e já temos os próximos passos."],["O objetivo desta entrega é otimizar resultados de comunicação.","Essa entrega é pra gerar hype."]]],["Exagerada","Evitamos o exagero que confunde ou cansa. Nosso impacto não vem de gritar mais alto, mas de uma personalidade autêntica e consistente. Cada provocação, metáfora ou escolha de palavras é feita com intenção e leitura de contexto. A força da Hypier está no recorte inteligente, no timing certo e na clareza da ideia. A marca chama atenção pelo que faz pensar, não pelo excesso de estímulo.",[["Essa campanha vai explodir a internet com uma estratégia extremamente disruptiva e inovadora!!!","A ideia tem ritmo e é pensada pra gerar hype onde importa."],["Essa campanha vai transformar completamente a presença digital da marca!!!","A campanha entra em sintonia com o canal onde a conversa acontece."]]],["Explicativa demais","Evitamos explicações longas e monótonas. Não transformamos nossas mensagens em aulas, nem sobrecarregamos o texto com justificativas. Preferimos clareza, síntese e fluidez. Quando explicamos, é para destravar o entendimento, não para cansar. A marca fala de forma inteligente, direta e fácil de acompanhar.",[["Optamos por essa abordagem estratégica porque ela dialoga com diversos aspectos do comportamento digital contemporâneo…","Essa abordagem funciona porque conversa direto com o agora."],["A escolha do formato se dá a partir da análise de múltiplas variáveis…","O formato entra bem no mood do feed."]]]].map(([t, d, e]) => `<div class="flow">${T.dd(false, t, T.body(d))}${e.map(([n, y]) => T.beforeAfter(n, y)).join('')}</div>`).join('')}
         </div>
         <div class="box flow">
           ${T.lbl('Grafias autorais', INFO.grafias)}
           ${T.body(`${P} Regra geral: a grafia do logo nem sempre se transfere para o texto corrido. Liste aqui os termos com escrita própria.`)}
           ${T.table(['Termo', 'Como escrevemos', 'Tipo', 'Observação'], [
-            [`<img src="${B.logos.simplificada}" alt="${B.name}" style="height:32px">`, `<span class="no-bold">${B.name}</span>`, 'marca', `${P} ex.: sempre em minúsculas`],
-            ['<span class="nt-name">iniciativa 1</span>', 'iniciativa 1', 'iniciativa', P],
-            ['<span class="nt-name">produto 1</span>', 'produto 1', 'produto', P],
-            ['<span class="nt-name">palavra 1</span>', 'palavra 1', 'vocabulário', P],
+            [`<img src="${B.logos.simplificada}" alt="${B.name}" style="height:32px">`, `<span class="no-bold">${B.name}</span>`, 'marca', 'sempre “a Hypier”'],
+            ['<span class="nt-name">Connect2B</span>', 'Connect2B', 'marca-mãe', P],
           ], '1.1fr 1fr .8fr 1.4fr')}
         </div>
         <div class="grid cols-2">
-          <div class="box flow">${T.lbl('Palavras que combinam conosco')}${T.chips(['Palavra 1', 'Palavra 2', 'Palavra 3'])}</div>
-          <div class="box flow">${T.lbl('Palavras que evitamos')}<div class="chips">${['Palavra 1', 'Palavra 2', 'Palavra 3'].map((t) => `<span class="chip" style="color:var(--no); border-color:color-mix(in oklch, var(--no) 35%, var(--line)); background:color-mix(in oklch, var(--no) 5%, transparent); text-decoration:line-through">${t}</span>`).join('')}</div>${T.hint(`${P} palavras que não fazem parte do nosso vocabulário e, se possível, o que usar no lugar.`)}</div>
+          <div class="box flow">${T.lbl('Palavras que combinam conosco')}${T.hint('Algumas palavras e grafias fazem parte do nosso vocabulário de marca e têm um significado especial para nós.')}${T.chips(["Dança","movimentar","sentir","criar","entrar junto","entrar no ar","inventar","ensaiar","parceria","timing","ideias","hype","ritmo","rolê","bastidor","flow","fluxo","passo","inspirar","emoção","despertar","arrepiar","pincelada","traço","mood","expressão"])}</div>
+          <div class="box flow">${T.lbl('Palavras que evitamos')}<div class="chips">${["Explodir","mensurar","otimizar","abordagem 360°","metodologicamente","eventualmente","prezado","inovadora"].map((t) => `<span class="chip" style="color:var(--no); border-color:color-mix(in oklch, var(--no) 35%, var(--line)); background:color-mix(in oklch, var(--no) 5%, transparent); text-decoration:line-through">${t}</span>`).join('')}</div></div>
         </div>
       </div>`,
     },
@@ -358,35 +363,18 @@
       sub: 'O tom de voz aplicado a situações do dia a dia e à linguagem digital.',
       render: () => `<div class="flow">
         <div>${T.lbl('Situações')}</div>
-        ${[
-          ['Saudação', 'Como iniciamos uma conversa.'],
-          ['Problemas', 'Como lidamos com erros, atrasos ou imprevistos.'],
-          ['Elogios', 'Como respondemos a elogios.'],
-          ['Reclamações', 'Como acolhemos e respondemos a reclamações.'],
-          ['Agradecimentos', 'Como agradecemos.'],
-          ['Encerramento', 'Como encerramos uma conversa.'],
-        ].map(([t, d]) => `<div class="box flow">
-          ${T.lbl(t)}
-          ${T.body(`${P} ${d}`)}
-          ${T.beforeAfter('[preencher] exemplo fora do tom', '[preencher] exemplo no tom da marca')}
-        </div>`).join('')}
+        <div class="grid cols-3">${[["Saudação",["E aí, gente! Como estão?","Fala, pessoal, como estão as coisas por aí?","Hello!"]],["Solução de problemas",["Vamos simplificar pra mensagem funcionar melhor.","Quem sabe marcamos um meet pra todo mundo ficar no mesmo ritmo?","A ideia é boa, só precisa entrar na hora certa.","Agora entra no timing certo."]],["Agradecimentos",["Valeu pela confiança no processo.","Valeu demais, seguimos juntos.","Obrigado por topar e seguir junto.","Boa provocação, ajudou a clarear."]]].map(([t, l]) => `<div class="box flow">${T.lbl(t)}${l.map((x) => T.body(`“${x}”`)).join('')}</div>`).join('')}</div>
         <div style="margin-top:12px">${T.lbl('Linguagem digital', INFO.digital)}</div>
         <div class="box flow">
           ${T.lbl('Hashtags', INFO.hashtags)}
           ${T.body(`${P} Regra geral: quantas usar, onde posicionar, maiúsculas/minúsculas.`)}
           ${T.table(['Hashtag', 'Quando usar'], [
             [`<span class="nt-name no-bold">#${B.name}</span>`, `${P} hashtag institucional`],
-            ['<span class="nt-name">#iniciativa1</span>', P],
-            ['<span class="nt-name">#iniciativa2</span>', P],
           ], '1fr 2fr')}
         </div>
         <div class="box flow">
           ${T.lbl('Emojis', INFO.emojis)}
-          ${T.body(`${P} Regra geral: a marca usa emojis? Em quais canais e com que frequência?`)}
-          <div class="grid cols-2">
-            ${T.dd(true, 'Prefira', T.body(`${P} emojis e contextos adequados.`))}
-            ${T.dd(false, 'Evite', T.body(`${P} emojis e contextos a evitar.`))}
-          </div>
+          ${T.table(['Emoji', 'Quando usar'], [["🎬","Ao falar de produção audiovisual"],["🖍️","Ao falar de criação ou criatividade"],["🤯","Ao falar de ideias e inovação"],["🕺","Ao falar usando trocadilho com dança ou movimento"],["💥","Ao falar de lançamento de case"],["🫂","Ao falar sobre parcerias e clientes"],["🇧 🇾  🇭 🇾 🇵 🇮 🇪 🇷","Como assinatura na legenda de cases"]].map(([e, d]) => [`<span style="font-size:22px">${e}</span>`, d]), '1fr 2fr')}
         </div>
       </div>`,
     },
@@ -394,20 +382,25 @@
       id: 'pos-imagens', label: 'Direção de imagens', group: '05 · Personalidade',
       crumb: 'Personalidade', title: 'Direção de imagens',
       sub: 'Que fotos escolher. O tratamento gráfico fica em Expressão visual → Layouts.',
-      render: () => `<div class="flow">
-        ${T.cards([
-          ['1 · Imagens editoriais', `${P} Critérios de escolha: enquadramento, foco, luz.`],
-          ['2 · Imagens institucionais', `${P} Temas, cenários, retratos da equipe.`],
-        ])}
+      render: () => {
+        const li = (a) => `<ul style="margin:0; padding-left:18px; display:flex; flex-direction:column; gap:6px">${a.map((x) => `<li>${x}</li>`).join('')}</ul>`;
+        return `<div class="flow">
+        <div class="box flow">${["A linguagem fotográfica da Hypier traduz o espírito criativo e ousado da marca por meio de imagens inesperadas, vibrantes e com um toque de estranhamento. As fotografias devem chamar atenção, despertar curiosidade e romper com o padrão visual comum da comunicação corporativa.","Para isso, o sistema fotográfico da marca se organiza em dois tipos principais de imagem: fotografias conceituais, baseadas em composições visuais inusitadas, e fotografias com pessoas em ângulos e enquadramentos pouco convencionais, que revelam o lado humano e próximo da marca."].map(T.body).join('')}</div>
+        ${[["1 · Fotos conceituais",["As imagens conceituais exploram composições nonsense, utilizando objetos do cotidiano de maneira inesperada. Elementos comuns podem ganhar novas funções, combinações ou proporções, criando cenas curiosas e visualmente intrigantes.","Sempre que possível, inclua objetos ou superfícies que dialoguem com a paleta cromática da marca, seja em fundos, cenários ou pequenos elementos da composição. Nas fotografias nonsense, evite a presença de pessoas. No máximo, uma mão pode aparecer interagindo com o objeto ou composição.","Evite paisagens ou cenários complexos. A preferência é por fundos sólidos ou superfícies simples, que valorizem o objeto e a ideia central da imagem. Em vez de representar uma ideia de forma literal, busque criar metáforas visuais inesperadas."],["Objetos cotidianos combinados de forma inesperada","Objetos reposicionados ou reinterpretados para criar novas leituras","Composições minimalistas com apenas um ou dois elementos","Elementos com proporções estranhas ou deslocadas","Objetos que dialogam com temas de comunicação, criatividade, internet e cultura digital"],["Fundos sólidos ou superfícies simples","Cores alinhadas à paleta da marca e/ou contrastes vibrantes","Poucos elementos em cena","Composição direta e gráfica","Iluminação limpa, com sombras suaves ou bem definidas"],["Cenários complexos ou paisagens","Muitos elementos competindo na mesma imagem","Fotografias literais ou previsíveis","Composições muito poluídas"]],["2 · Fotos com pessoas",["Quando a fotografia envolver pessoas, como em conteúdos de time, bastidores ou cases, o foco deve ser revelar o lado humano e criativo da marca. Dar preferência a pessoas jovens, com estilo e personalidade marcantes, transmitindo autenticidade, espontaneidade e atitude.","As imagens devem parecer naturais e não encenadas, registrando momentos reais de interação, criação ou troca de ideias."],["Reuniões criativas ou brainstorms","Conversas espontâneas entre integrantes do time","Pessoas discutindo ideias ou referências","Bastidores de criação ou produção de conteúdo","Pessoas explorando materiais, sketches ou telas"],["Lentes mais abertas ou distorções sutis","Ângulos inesperados","Enquadramentos não convencionais","Movimento natural e pouca rigidez na pose","Luz natural ou iluminação leve e direta"],["Fotografias posadas","Ambientes corporativos genéricos","Cenários neutros ou sem personalidade","Expressões artificiais ou rígidas","Imagens muito formais ou institucionais"]]].map(([t, txt, ctx, est, ev]) => `<div class="box flow">
+          ${T.lbl(t)}
+          ${txt.map(T.body).join('')}
+          <div class="grid cols-3">
+            <div class="flow">${T.lbl('Nossos contextos preferidos')}<div class="copytext">${li(ctx)}</div></div>
+            <div class="flow">${T.lbl('Estilo de composição')}<div class="copytext">${li(est)}</div></div>
+            ${T.dd(false, 'Evitar', `<div class="copytext">${li(ev)}</div>`)}
+          </div>
+        </div>`).join('')}
         <div class="box flow">
-          ${T.lbl('Evite')}
-          <div class="grid cols-3">${[1, 2, 3].map((i) => T.dd(false, `Evitar ${i}`, T.body(P))).join('')}</div>
-        </div>
-        <div class="box flow">
-          ${T.lbl('Linguagem fotográfica — exemplos')}
+          ${T.lbl('Linguagem fotográfica · exemplos')}
           <div class="grid cols-3">${[1, 2, 3, 4, 5, 6].map((i) => T.photo(`assets/fotos/foto-0${i}.jpg`, `exemplo ${i}`, 180)).join('')}</div>
         </div>
-      </div>`,
+      </div>`;
+      },
     },
     {
       id: 'pos-manifesto', label: 'Manifesto', group: '06 · Experiência',
