@@ -235,6 +235,7 @@
         <button type="button" data-adm="undo" ${store.hist.length ? '' : 'disabled'}>Desfazer</button>
         <button type="button" data-adm="restore">Restaurar original desta página</button>
         <button type="button" data-adm="discard" ${total ? '' : 'disabled'}>Descartar rascunho</button>
+        <button type="button" data-adm="import">Importar doc</button>
         <button type="button" data-adm="mods">Módulos do projeto</button>
         <button type="button" data-adm="gh">GitHub</button>
         <button type="button" class="pri" data-adm="review" ${total ? '' : 'disabled'}>Revisar e publicar</button>
@@ -549,6 +550,11 @@
       location.reload();
     }
     if (a === 'mods') modsForm();
+    if (a === 'import') {
+      window.ADM = { commit, apply, modal, uiAlert, get D() { return D; } };
+      if (window.DOCIMPORT) window.DOCIMPORT.open();
+      else { const sc = document.createElement('script'); sc.src = 'engine/doc-import.js?v=' + Date.now(); sc.onload = () => window.DOCIMPORT && window.DOCIMPORT.open(); sc.onerror = () => uiAlert('Não foi possível carregar engine/doc-import.js.'); document.head.appendChild(sc); }
+    }
     if (a === 'gh') ghForm();
     if (a === 'exit') { store.on = false; location.reload(); }
     if (a === 'review') {

@@ -419,3 +419,6 @@ body.adm [data-tip]:hover::after{ display:none; }
 .adm-mods legend{ font-weight:700; font-size:13px; padding:0 6px; }
 .adm-mods label{ display:flex; gap:10px; align-items:center; font-size:14px; cursor:pointer; }
 .adm-mods label.lock{ opacity:.55; cursor:default; }
+.adm-imp{ width:100%; min-height:220px; border:1px solid var(--line); border-radius:12px; padding:12px 14px; font:13px/1.5 var(--font-text); resize:vertical; background:var(--paper); color:var(--ink); }
+.adm-imp-list{ list-style:none; margin:8px 0 0; padding:0; display:flex; flex-direction:column; gap:8px; max-height:36vh; overflow:auto; }
+.adm-imp-list li{ display:flex; flex-direction:column; gap:2px; padding:8px 12px; border:1px solid var(--line); border-radius:12px; }
