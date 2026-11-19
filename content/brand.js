@@ -168,8 +168,8 @@ window.BRAND = {
      Sem arquivos, o manual usa o fallback. cssLinks: folhas externas opcionais (ex.: Google Fonts). */
   fonts: {
     /* download: arquivo ou .zip em assets/fonts/ · license: arquivo de licença ou URL do site da fundição. Vazio = botão desativado. */
-    display: { family: 'ANTRIPODA CONDENSED', download: 'assets/fonts/fonte-display.zip', license: 'assets/fonts/fonte-display-licenca.txt', role: 'títulos', weights: [], files: [], fallback: '\'Trebuchet MS\', system-ui, sans-serif' },
-    text:    { family: 'Fractul', download: 'assets/fonts/fonte-texto.zip', license: 'assets/fonts/fonte-texto-licenca.txt', role: 'texto corrido', weights: [], files: [], fallback: 'system-ui, -apple-system, \'Segoe UI\', sans-serif' },
+     display: { family: 'ANTRIPODA CONDENSED', download: 'assets/fonts/fonte-display.zip', license: 'assets/fonts/fonte-display-licenca.txt', role: 'títulos', weights: [800], files: [{ src: 'assets/fonts/display-800.ttf', weight: 800 }], fallback: '\'Trebuchet MS\', system-ui, sans-serif' },
+    text:    { family: 'Fractul', download: 'assets/fonts/fonte-texto.zip', license: 'assets/fonts/fonte-texto-licenca.txt', role: 'texto corrido', weights: [400, 700], files: [{ src: 'assets/fonts/texto-400.ttf', weight: 400 }, { src: 'assets/fonts/texto-700.ttf', weight: 700 }], fallback: 'system-ui, -apple-system, \'Segoe UI\', sans-serif' },
     /* OPCIONAL: só para marcas com sub-marcas e orientações de arquitetura. Sem sub-marcas, apague esta linha (o box some da Tipografia). */
     cssLinks: [],
   },
